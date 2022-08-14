@@ -240,13 +240,13 @@ def create_app(test_config=None):
         quiz_category = body.get('quiz_category', None)
 
         
-        if quiz_category['id'] !=0:
+        if quiz_category['type'] == 'click':
+            questions = Question.query.filter(
+            Question.id.notin_(previous_questions)).all()
+        else:
             questions = Question.query.filter(
             Question.id.notin_(previous_questions),
             Question.category == quiz_category['id']).all()
-        else:
-            questions = Question.query.filter(
-            Question.id.notin_(previous_questions)).all()
             
         if not questions:
             abort(404)
