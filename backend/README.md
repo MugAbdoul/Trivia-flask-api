@@ -89,6 +89,184 @@ You will need to provide detailed documentation of your API endpoints including 
   "6": "Sports"
 }
 ```
+---
+
+`GET '/questions?page=${integer}'`
+
+- Fetches a paginated set of questions, a total number of questions, all categories and current category string.
+- Request Arguments: `page` - integer
+- Returns: An object with 10 paginated questions, total questions, object including all categories, and current category string
+
+Example: `curl http://localhost:5000/questions?page=2`
+
+```json
+{
+  "questions": [
+    {
+      "id": 1,
+      "question": "This is a question",
+      "answer": "This is an answer",
+      "difficulty": 5,
+      "category": 2
+    }
+  ],
+  "totalQuestions": 100,
+  "categories": {
+    "1": "Science",
+    "2": "Art",
+    "3": "Geography",
+    "4": "History",
+    "5": "Entertainment",
+    "6": "Sports"
+  },
+  "currentCategory": "History"
+}
+```
+
+---
+
+`GET '/categories/${id}/questions'`
+
+- Fetches questions for a cateogry specified by id request argument
+- Request Arguments: `id` - integer
+- Returns: An object with questions for the specified category, total questions, and current category string
+
+Example: `curl http://localhost:5000/categories/2/questions`
+
+```json
+{
+  "questions": [
+    {
+      "id": 1,
+      "question": "This is a question",
+      "answer": "This is an answer",
+      "difficulty": 5,
+      "category": 4
+    }
+  ],
+  "totalQuestions": 100,
+  "currentCategory": "History"
+}
+```
+
+---
+
+`DELETE '/questions/${id}'`
+
+- Deletes a specified question using the id of the question
+- Request Arguments: `id` - integer
+- Returns: Does not need to return anything besides the appropriate HTTP status code. Optionally can return the id of the question. If you are able to modify the frontend, you can have it remove the question using the id instead of refetching the questions.
+
+Example: `curl -X DELETE http://localhost:5000/questions/2`
+
+---
+
+`POST '/quizzes'`
+
+- Sends a post request in order to get the next question
+- Request Body:
+
+Example: `curl http://localhost:5000/quizzes -X POST -H "Content-Type: application/json" -d '{"previous_questions":[1, 4, 20, 15], "quiz_category":{"type":"Art","id":2}}'`
+
+```json
+{
+    "previous_questions": "Previous questions",
+    "quiz_category": "current category"
+ }
+```
+
+- Returns: a single new question object
+
+```json
+{
+  "question": {
+    "id": 1,
+    "question": "This is a question",
+    "answer": "This is an answer",
+    "difficulty": 5,
+    "category": 4
+  }
+}
+```
+
+---
+
+`POST '/questions'`
+
+- Sends a post request in order to add a new question
+- Request Body:
+
+Example: `curl http://localhost:5000/questions -X POST -H "Content-Type: application/json" -d {"question":"who is the best artist in the world today?","answer":"Rihanna", "category": 4, "difficulty": 2}`
+
+```json
+{
+  "question": "Heres a new question string",
+  "answer": "Heres a new answer string",
+  "difficulty": 1,
+  "category": 3
+}
+```
+- Returns: any array of questions, a number of totalQuestions, created will be id of new question and success as boolean
+
+```json
+{
+    "success": "True",
+    "created": "new question id",
+    "questions": "current questions",
+    "total_questions": "number of questions",
+}
+```
+
+---
+
+`POST '/questions'`
+
+- Sends a post request in order to search for a specific question by search term
+- Request Body:
+
+Example: `curl http://localhost:5000/questions -X POST -H "Content-Type: application/json" -d '{"searchTerm":"title"}'`
+
+```json
+{
+  "searchTerm": "this is the term the user is looking for"
+}
+```
+
+- Returns: any array of questions, a number of totalQuestions that met the search term and the current category string
+
+```json
+{
+  "questions": [
+    {
+      "id": 1,
+      "question": "This is a question",
+      "answer": "This is an answer",
+      "difficulty": 5,
+      "category": 5
+    }
+  ],
+  "totalQuestions": 100,
+  "currentCategory": "Entertainment"
+}
+```
+
+
+## Error Handlers
+
+When an error occurs a JSON response is returned
+- Returns these error types when the request fails
+	- 400: Bad Request
+	- 404: Resource Not Found
+	- 422: Not Processable
+	- 500: Internal Server Error
+Example "Resource Not Found":
+```
+{
+	"success": False,
+	"error": 404,
+	"message": "Error message"
+}
+```
 
 ## Testing
 
